@@ -1,1 +1,2 @@
-inotifywait -rme move --format '%w%f' --exclude "/$" /mnt/usb/pcap/dumped/ | ~/pcap_to_csv.sh
+#!/bin/bash
+inotifywait -rme move --format '%w%f' --exclude "/$" /data/dumped_pcap/ | /usr/bin/pcap_to_csv.sh

@@ -1,1 +1,3 @@
-mv $1 /mnt/usb/pcap/dumped/$(date +%s%N).pcap
+#!/bin/bash
+chown user:user $1
+mv $1 /data/dumped_pcap/$(date +%s%N).pcap
