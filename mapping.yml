@@ -1,0 +1,9 @@
+frame.len : int
+frame.time_epoch : timestamp
+# ip.src : str
+# ip.dst : str
+# tcp.srcport : int
+# tcp.dstport : int
+# udp.srcport : int
+# udp.dstport : int
+# frame.protocols : str
