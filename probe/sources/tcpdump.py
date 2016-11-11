@@ -3,12 +3,13 @@ import subprocess
 
 
 class Tcpdump:
-    def __init__(self, interface, buffer_size, pcap_size, pcap_timeout, output_filename, post_process=None):
+    def __init__(self, interface, buffer_size, pcap_size, pcap_timeout, output_filename, user, post_process=None):
         self._interface = interface
         self._buffer_size = buffer_size
         self._pcap_size = pcap_size
         self._pcap_timeout = pcap_timeout
         self._output_filename = output_filename
+        self._user = user
         self._post_process = post_process
 
         self._log = logging.getLogger(__name__)
@@ -19,7 +20,8 @@ class Tcpdump:
                 "-B", str(self._buffer_size),
                 "-C", str(self._pcap_size),
                 "-G", str(self._pcap_timeout),
-                "-w", "{}".format(self._output_filename)]
+                "-w", self._output_filename,
+                "-Z", self._user]
 
         if self._post_process:
             cmd += ["-z", self._post_process]

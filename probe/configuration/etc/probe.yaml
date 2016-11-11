@@ -4,6 +4,7 @@ capture:
     pcap_size : 50
     pcap_timeout : 60
     output_filename : /tmp/%s.pcap
+    user: user
 
 process:
     process_number : 3
