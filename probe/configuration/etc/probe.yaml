@@ -16,6 +16,7 @@ process:
         - ip.dst
         - tcp.srcport
         - tcp.dstport
+        - tcp.stream
         - udp.srcport
         - udp.dstport
         - frame.protocols

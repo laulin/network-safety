@@ -25,7 +25,7 @@ class PcapToCsvPool:
 
 
     def put(self, input_filename):
-        self._log.info("request conversion on " + file_name)
+        self._log.info("request conversion on " + input_filename)
         self._queue.put(input_filename)
 
 if __name__ == "__main__":
