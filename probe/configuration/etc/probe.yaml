@@ -7,21 +7,22 @@ capture:
 
 process:
     process_number : 3
-    fields : - frame.len
-             - frame.time_epoch
-             - eth.src
-             - eth.dst
-             - ip.src
-             - ip.dst
-             - tcp.srcport
-             - tcp.dstport
-             - udp.srcport
-             - udp.dstport
-             - frame.protocols
-             - dns.qry.name
-             - http.cookie
-             - http.referer
-             - http.request.full_uri
-             - http.user_agent
+    fields :
+        - frame.len
+        - frame.time_epoch
+        - eth.src
+        - eth.dst
+        - ip.src
+        - ip.dst
+        - tcp.srcport
+        - tcp.dstport
+        - udp.srcport
+        - udp.dstport
+        - frame.protocols
+        - dns.qry.name
+        - http.cookie
+        - http.referer
+        - http.request.full_uri
+        - http.user_agent
     input_directory : /tmp/
-    output_directory: /tmp/ 
+    output_directory: /tmp/
