@@ -1,0 +1,6 @@
+capture:
+    interface : enp0s3
+    buffer_size : 10240
+    pcap_size : 50
+    pcap_timeout : 60
+    output_filename : /tmp/%s.pcap
