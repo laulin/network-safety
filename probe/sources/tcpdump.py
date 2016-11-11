@@ -19,7 +19,7 @@ class Tcpdump:
                 "-B", str(self._buffer_size),
                 "-C", str(self._pcap_size),
                 "-G", str(self._pcap_timeout),
-                "-w", "'{}'".format(self._output_filename)]
+                "-w", "{}".format(self._output_filename)]
 
         if self._post_process:
             cmd += ["-z", self._post_process]
@@ -33,6 +33,7 @@ class Tcpdump:
         return subprocess.Popen(cmd)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     tcpdump = Tcpdump("enp0s3", 10240, 50, 60, "/tmp/%s.pcap")
     process = tcpdump.popen()
     process.wait()
