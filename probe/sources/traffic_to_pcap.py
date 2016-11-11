@@ -7,6 +7,7 @@ if __name__ == "__main__":
     with open(sys.argv[1]) as f:
         configuration = yaml.load(f)
 
-        tcpdump = Tcpdump(**configuration["capture"])
-        process = tcpdump.popen()
-        process.wait()
+    c = configuration["capture"]
+    tcpdump = Tcpdump(c["interface"], c["buffer_size"], c["pcap_size"], c["pcap_timeout"], c["output_filename"])
+    process = tcpdump.popen()
+    process.wait()
