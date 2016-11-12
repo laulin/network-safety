@@ -28,3 +28,24 @@ process:
         - http.user_agent
     input_directory : /tmp/
     output_directory: /tmp/
+
+logging:
+    version: 1
+    formatters :
+        f:
+            format: "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
+    handlers :
+        console:
+            class: logging.StreamHandler
+            formatter: f
+            level: DEBUG
+        log:
+            class : logging.handlers.RotatingFileHandler
+            formatter: f
+            filename: /tmp/logconfig.log
+            level: DEBUG
+            maxBytes: 10240
+            backupCount: 3
+    root:
+        handlers: [console, log]
+        level: DEBUG

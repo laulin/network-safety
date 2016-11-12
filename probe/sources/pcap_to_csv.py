@@ -3,6 +3,7 @@ import sys
 import os
 import os.path
 import logging
+import logging.config
 import glob
 
 from inotify.adapters import Inotify
@@ -40,9 +41,10 @@ class PcapToCsv:
                     self._pcap_to_csv_pool.put(path)
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     with open(sys.argv[1]) as f:
         configuration = yaml.load(f)
+
+    logging.config.dictConfig(configuration["logging"])
 
     c = configuration["process"]
     pcap_to_csv = PcapToCsv(c["process_number"], c["fields"], c["input_directory"], c["output_directory"])
