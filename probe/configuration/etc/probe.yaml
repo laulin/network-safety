@@ -1,13 +1,23 @@
+# capture parametes
 capture:
+    # select the interface watched
     interface : enp0s3
+    # used to prevent drop during overload, in byte
     buffer_size : 10240
+    # the max pcap size, on in mega byte
     pcap_size : 50
+    # timeout of each PCAP, in seconds
     pcap_timeout : 60
+    # where the pcap is written and how (%s means current seconds)
     output_filename : /data/%s.pcap
+    # used to chown just before writing the PCAP file (root by default)
     user: user
 
+# the pcap to csv configuration
 process:
+    # we can use some process to manage many pcap as same time
     process_number : 3
+    # **very important** this data that is keept. See tshark fitler reference
     fields :
         - frame.len
         - frame.time_epoch
@@ -26,8 +36,12 @@ process:
         - http.referer
         - http.request.full_uri
         - http.user_agent
+    # where pcap is took
     input_directory : /data/
+    # where csv is written. Wait : within this directory, a csv dir will be
+    # created and it will contains dirs with the day date like yyyy-mm-dd
     output_directory: /data/
+    # the output user
     user : user
 
 logging_catpure:
