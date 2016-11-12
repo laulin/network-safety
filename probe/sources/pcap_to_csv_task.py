@@ -3,15 +3,17 @@ import os.path
 from datetime import datetime
 import time
 import logging
+from pwd import getpwnam
 
 from tshark import Tshark
 
 
 class PcapToCsvTask:
-    def __init__(self, fields, output_directory):
+    def __init__(self, fields, output_directory, user=None):
         self._tshark = Tshark(fields)
         self._output_directory = output_directory
         self._log = logging.getLogger("PcapToCsvTask")
+        self._user = user
 
     def do(self, input_filename):
         # try to make a subdirectory about the current day, like /xxx/2016-08-10
@@ -34,6 +36,11 @@ class PcapToCsvTask:
         # writing the csv file
         with open(csv_filename, "w") as f:
             f.write(output)
+        # changing the right
+        if self._user:
+            info = getpwnam(self._user)
+            os.chown(csv_filename, info.pw_uid, info.pw_gid)
+
         self._log.info("csv file {} created".format(csv_filename))
         # removing the source file
         os.remove(input_filename)

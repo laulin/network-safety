@@ -11,12 +11,11 @@ from inotify.adapters import Inotify
 from pcap_to_csv_pool import PcapToCsvPool
 
 class PcapToCsv:
-    def __init__(self, process_number, fields, input_directory, output_directory):
-        self._pcap_to_csv_pool = PcapToCsvPool(process_number, fields, output_directory)
+    def __init__(self, process_number, fields, input_directory, output_directory, user=None):
+        self._pcap_to_csv_pool = PcapToCsvPool(process_number, fields, output_directory, user)
         self._inotify = i = Inotify()
         self._inotify.add_watch(input_directory.encode("utf8"))
         self._log = logging.getLogger("PcapToCsv")
-        self.process_existing_file(input_directory)
 
     def process_existing_file(self, input_directory):
         path = os.path.join(input_directory, "*.pcap")
@@ -34,18 +33,23 @@ class PcapToCsv:
             if event is not None :
                 (header, type_names, watch_path, filename) = event
                 self._log.debug("event :  "+ str((type_names, watch_path, filename)))
-                if "IN_CLOSE_WRITE" in type_names:
-                    path = os.path.join(watch_path, filename)
-                    path = path.decode("utf8")
-                    self._log.info("push "+path)
-                    self._pcap_to_csv_pool.put(path)
+                watch_path = watch_path.decode("utf8")
+                filename = filename.decode("utf8")
+
+                if "IN_CREATE" in type_names and filename.endswith(".pcap"):
+                    path = os.path.join(watch_path, "*.pcap")
+                    files = sorted(glob.glob(path))[0:-1]
+                    for pcap_file in files:
+                        if not pcap_file.endswith(filename):
+                            self._pcap_to_csv_pool.put(pcap_file)
+
 
 if __name__ == "__main__":
     with open(sys.argv[1]) as f:
         configuration = yaml.load(f)
 
-    logging.config.dictConfig(configuration["logging"])
+    logging.config.dictConfig(configuration["logging_process"])
 
     c = configuration["process"]
-    pcap_to_csv = PcapToCsv(c["process_number"], c["fields"], c["input_directory"], c["output_directory"])
+    pcap_to_csv = PcapToCsv(c["process_number"], c["fields"], c["input_directory"], c["output_directory"], c.get("user"))
     pcap_to_csv.run()

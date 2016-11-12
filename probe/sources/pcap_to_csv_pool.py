@@ -4,11 +4,11 @@ import logging
 from pcap_to_csv_task import PcapToCsvTask
 
 class PcapToCsvPool:
-    def __init__(self, process_number, fields, output_directory):
+    def __init__(self, process_number, fields, output_directory, user=None):
         self._pool = None
         self._queue = multiprocessing.Queue()
         self._process_number = process_number
-        self._pcap_to_csv_task = PcapToCsvTask(fields, output_directory)
+        self._pcap_to_csv_task = PcapToCsvTask(fields, output_directory, user)
         self._log = logging.getLogger("PcapToCsvPool")
 
     def task(self, queue):

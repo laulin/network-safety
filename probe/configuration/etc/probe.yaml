@@ -28,8 +28,30 @@ process:
         - http.user_agent
     input_directory : /data/
     output_directory: /data/
+    user : user
 
-logging:
+logging_catpure:
+    version: 1
+    formatters :
+        f:
+            format: "%(asctime)s %(name)s %(process)d %(levelname)s %(message)s"
+    handlers :
+        console:
+            class: logging.StreamHandler
+            formatter: f
+            level: DEBUG
+        log:
+            class : logging.handlers.RotatingFileHandler
+            formatter: f
+            filename: /tmp/logconfig_capture.log
+            level: DEBUG
+            maxBytes: 1048576
+            backupCount: 3
+    root:
+        handlers: [console, log]
+        level: DEBUG
+
+logging_process:
     version: 1
     formatters :
         f:
@@ -42,9 +64,9 @@ logging:
         log:
             class : logging.handlers.RotatingFileHandler
             formatter: f
-            filename: /tmp/logconfig.log
+            filename: /tmp/logconfig_process.log
             level: DEBUG
-            maxBytes: 10240
+            maxBytes: 1048576
             backupCount: 3
     root:
         handlers: [console, log]
