@@ -19,9 +19,18 @@ class Tshark:
 
     def check_output(self, input_filename):
         cmd = self.make_command(input_filename)
-        output = subprocess.check_output(cmd)
-        output = output.decode("utf8")
-        return output
+        try:
+            output = subprocess.check_output(cmd)
+            output = output.decode("utf8")
+            return output
+        except:
+            process = subprocess.Popen(cmd, shell=True,
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+            process.wait()
+            out, err = process.communicate()
+            errcode = process.returncode
+            raise Exception("process tshark finished with {} recturn code : stdout : '{}' stderr : '{}'".format(errcode, out.decode("utf8"), err.decode("utf8")))
 
 if __name__ == "__main__":
     import sys
