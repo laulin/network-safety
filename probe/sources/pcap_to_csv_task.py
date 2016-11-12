@@ -15,17 +15,24 @@ class PcapToCsvTask:
         self._log = logging.getLogger("PcapToCsvTask")
         self._user = user
 
+    def mkdir(self, path):
+        try:
+            os.mkdir(path)
+            self._log.info("directory {} created".format(path))
+        except:
+            self._log.debug("directory {} not created".format(path))
+
     def do(self, input_filename):
-        # try to make a subdirectory about the current day, like /xxx/2016-08-10
+        # try to make a subdirectory about the current day, like /xxx/csv/2016-08-10
         now = datetime.now()
         day_directory = "{}-{}-{}".format(now.year, now.month, now.day)
-        destination_directory = os.path.join(self._output_directory, day_directory)
 
-        try:
-            os.mkdir(destination_directory)
-            self._log.info("directory {} created".format(destination_directory))
-        except:
-            self._log.debug("directory {} not created".format(destination_directory))
+        # make xxx/csv
+        destination_directory = os.path.join(self._output_directory, "csv")
+        self.mkdir(destination_directory)
+        # make xxx/csv/date
+        destination_directory = os.path.join(destination_directory, day_directory)
+        self.mkdir(destination_directory)
 
         # making the convertion
         output = self._tshark.check_output(input_filename)

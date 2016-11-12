@@ -14,6 +14,7 @@ class Tcpdump:
 
         self._log = logging.getLogger(__name__)
 
+
     def make_command(self):
         cmd = ["tcpdump",
                 "-pni", self._interface,
@@ -29,6 +30,7 @@ class Tcpdump:
         return cmd
 
     def popen(self, **kwargs):
+        self._log.info("starting")
         cmd = self.make_command()
         self._log.debug(" ".join(cmd))
 

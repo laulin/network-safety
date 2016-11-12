@@ -21,6 +21,7 @@ class PcapToCsvPool:
                 self._log.debug(e)
 
     def run(self):
+        self._log.info("starting")
         self._pool = multiprocessing.Pool(self._process_number, self.task,(self._queue,))
 
 
