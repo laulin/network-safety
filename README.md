@@ -9,7 +9,14 @@ From this point, I decided to check it by my self. And now my goal is to give
 you a simple but powerful tool to monitor you network again malicious behavious
 and emerging threats.
 
-## global warnings
+It is composed of two containers :
+
+* probe : it captures network traffic and convert it into CSV file
+* analytics : it takes CSV file and process it.
+
+The analytics is not currently working but it is planned.
+
+## Global warnings
 
 You must be aware of what you are doing. **In any case I could not be held
 responsible**. In particulary, you should be aware of :
@@ -26,9 +33,7 @@ algorithm is perfect. *The better protection you may have is yourself !*
 
 You have been warned, so now let's play :)
 
-## How it is working ?
-
-### Hardware
+## Hardware
 
 At first you must have this stuff :
 
@@ -41,6 +46,8 @@ At first you must have this stuff :
 You shouldn't **NOT** use the SD card as a storage. It is very slow, unefficient
 and you will dramatically decrease its life time.
 
+## Installation
+
 ### Os installation
 
 I am using [Rasbian lite](https://www.raspberrypi.org/downloads/raspbian/) and
@@ -50,6 +57,13 @@ A good tips is about booting without HDMI : set hdmi_force_hotplug=1 in
 config.txt before insert it.
 
 By default, ssh is enable with user=*pi* and password=*raspberry*.
+
+### Automatic installation
+
+I try to make thing as easy as possible. I use Docker but I would also need to
+use Ainsible the front line installation.
+
+I will do in a future. Sorry.
 
 ### network capture
 
@@ -91,4 +105,56 @@ see eth0, eth1 and eth2, at least. At last, do :
 * service network restart
 * check that br0 is existing with *ifconfig*
 
-Now you can man-in-the-middle you internet traffic. Check that you still have an internet connection.
+Now you can man-in-the-middle you internet traffic. Check that you still have
+an internet connection.
+
+### Optionnal : mount storage
+
+As I explained in the hardware listing, you should have an
+external storage. In my case I use an USB key - not the best choice - as
+storage. To mount it, I do :
+
+* mkdir /data
+* Add to /etc/fstab :
+
+>/dev/sda1 /data/ ext4 defaults 0 0
+
+You can also make a *SSHFS* to a NAS for example if you want. I love *SSHFS*.
+A great thank you to *SSHFS* team - you make my day every day.
+
+### I need a Whale
+
+You need to install docker. For that, as root :
+
+* wget on https://get.docker.com/
+* run the script
+* gpasswd -a pi docker
+* service docker restart
+* logout and login as pi
+
+### Installing containers
+
+A makefile should be added to make it easier. For both components, go to its
+directory and *docker build -it {probe,analytics} .*.
+
+You can clone on you desktop or on raspberry directory but do not try to build
+an image on you desktop ("oh great, i will use docker {load,save}" - Nope) :
+the instruction set (ARM vs X86) is different. You will have to build it on
+you raspberry and it takes many time !
+
+## Running it
+
+### Probe
+
+It is quiet easy :
+
+>     docker run -d -p 9001:9001 --cap-add=NET_ADMIN --net=host -v /data:/data -it probe
+
+Now on 127.0.0.1:9001, you can watch the supervisor interface : both capture
+and process is running.
+
+The directory /data/csv/yyyy-mm-dd/ will contains .csv file.
+
+### Analytics
+
+***TODO***
