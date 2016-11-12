@@ -3,7 +3,7 @@ capture:
     buffer_size : 10240
     pcap_size : 50
     pcap_timeout : 60
-    output_filename : /tmp/%s.pcap
+    output_filename : /data/%s.pcap
     user: user
 
 process:
@@ -26,8 +26,8 @@ process:
         - http.referer
         - http.request.full_uri
         - http.user_agent
-    input_directory : /tmp/
-    output_directory: /tmp/
+    input_directory : /data/
+    output_directory: /data/
 
 logging:
     version: 1
